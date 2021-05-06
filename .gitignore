@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 config.json
 *.vscode
+logs/*
+.DS_Store
 
 # C extensions
 *.so
