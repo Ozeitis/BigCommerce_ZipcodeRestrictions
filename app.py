@@ -27,8 +27,6 @@ emailPassword = config["email-password"]
 
 now = datetime.now()
 filePath = "logs/{}.log".format(now)
-
-
 def log_print(message):
     with open (filePath, 'a') as f:
         print(now, message)
@@ -248,12 +246,11 @@ async def resultUI():
     
 def start(id, emails):
     now = datetime.now()
-    filePath = "logs/{}.log".format(now)
     try:
         os.remove("logs/latest.log")
     except:
         log_print("NO 'logs/latest.log' FOUND!")
-    newFile = open(filePath, "x")
+    newFile = open(filePath, "w")
     newFile.write("Time script was ran: {}\n".format(now))
     newFile.close()
     initial(id)
