@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  </head>
+
+<nav class="navbar is-transparent">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="">
+      <img src="https://cdn11.bigcommerce.com/s-9j9zreeu/images/stencil/500w/botach_simplelogo_062019_1561073382__35712.original.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+    </a>
+    <div class="navbar-burger" data-target="navbarExampleTransparentExample">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div id="navbarExampleTransparentExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="{{ url_for('index') }}">
+        Home
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link" href="https://bulma.io/documentation/overview/start/">
+          Scripts
+        </a>
+        <div class="navbar-dropdown is-boxed">
+          <a class="navbar-item" href="{{ url_for('restrictions') }}">
+            Product Restrictions
+          </a>
+        </div>
+      </div>
+    </div>
+
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  
+  <section class="hero is-black">
+  <div class="hero-body">
+    <p class="title">
+      Home Page of Botach BigCommerce Apps
+    </p>
+    <p class="subtitle">
+      Developed by Oze Botach
+    </p>
+  </div>
+</section>
+  <body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Hello World
+      </h1>
+      <p class="subtitle">
+        The homepage is currentky <strong>under construction!</strong>
+      </p>
+    </div>
+  </section>
+
+<div class="container">
+  <div class="notification is-white is-rounded">
+    <article class="message">
+    <div class="message-header">
+        <p>TODO - Ignore This</p>
+        <button class="delete" aria-label="delete"></button>
+    </div>
+    <div class="message-body">
+    <p>This is the latest output: <span id="latest"></span></p>
+    <p>This is all the output:</p>
+    <ul id="output"></ul>
+    <script>
+        var latest = document.getElementById('latest');
+        var output = document.getElementById('output');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{ url_for('stream') }}');
+        xhr.send();
+        var position = 0;
+
+        function handleNewData() {
+            // the response text include the entire response so far
+            // split the messages, then take the messages that haven't been handled yet
+            // position tracks how many messages have been handled
+            // messages end with a newline, so split will always show one extra empty message at the end
+            var messages = xhr.responseText.split('\n');
+            messages.slice(position, -1).forEach(function(value) {
+                latest.textContent = value;  // update the latest value in place
+                // build and append a new item to a list to log all output
+                var item = document.createElement('li');
+                item.textContent = value;
+                output.appendChild(item);
+            });
+            position = messages.length - 1;
+        }
+
+        var timer;
+        timer = setInterval(function() {
+            // check the response for new data
+            handleNewData();
+            // stop checking once the response has ended
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                clearInterval(timer);
+                latest.textContent = 'Done';
+            }
+        }, 1000);
+    </script>
+    </div>
+    </article>
+    </div>
+</div>
+
+  </body>
+</html>
