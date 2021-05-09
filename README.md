@@ -26,6 +26,7 @@ This project is developed in **Python**, but also uses the **Flask framework** a
 **How to run this app?**
 - Download and in main directory add a file called "config.json"
 - Copy the format for config.json below and enter the required fields
+- Make a folder called logs and add an empty text file called latest.log
 - Open a terminal from the folder
 - Type "flask run"
 - Open browser and go to "localhost:5000"
