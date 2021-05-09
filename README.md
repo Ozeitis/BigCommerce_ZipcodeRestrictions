@@ -21,5 +21,9 @@ This project is developed in **Python**, but also uses the **Flask framework** a
   - Seperate each product and its restructions by line.
 
 
-
 ![Preview:](https://s3.gifyu.com/images/2021-05-09-13.33.52.gif)
+
+**How to run this app?**
+- Download and open a terminal from the folder
+- Type "flask run"
+- Open browser and go to "localhost:5000"
