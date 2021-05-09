@@ -1,6 +1,7 @@
 This is an app I made for a company I work for but decided to make free.
-
+===============	
 The use case this was developed for was to restrict the orders of ammo and gun magazines by zipcode, allowing the company to not block the entire state, restricting legal zipcodes within the state from purchasing.
+===============	
 
 This project is developed in **Python**, but also uses the **Flask framework** abd **Bulma** to create a visually appealing website that manages the script/
 
