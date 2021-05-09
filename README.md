@@ -24,6 +24,10 @@ This project is developed in **Python**, but also uses the **Flask framework** a
 ![Preview:](https://s3.gifyu.com/images/2021-05-09-13.33.52.gif)
 
 **How to run this app?**
-- Download and open a terminal from the folder
+- Download and in main directory add a file called "config.json"
+- Copy the format for config.json below and enter the required fields
+- Open a terminal from the folder
 - Type "flask run"
 - Open browser and go to "localhost:5000"
+
+![config.json example:](https://i.ibb.co/qF0qSpV/Image-5-9-21-at-1-56-PM.jpg)
