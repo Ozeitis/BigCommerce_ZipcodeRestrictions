@@ -24,6 +24,10 @@ xauthtoken = config["x-auth-token"]
 storehash = config["store-hash"]
 configEmail = config["email"]
 emailPassword = config["email-password"]
+companyName = config["company-name"]
+adminEmail = config["admin-email"] #will email this person upon EVERY execution
+smtpHost = config["smtp-host"]
+smtpPort = config["smtp-port"]
 
 now = datetime.now()
 filePath = "logs/{}.log".format(now)
@@ -133,7 +137,7 @@ def cancelIllegalOrders():
 
         for canceled in cancelList:
             if response.status_code != 200:
-                    log_print("ERROR WHEN TRYING TO ENACT PUT METHOD FOR ORDER CANCELING! REPORT TO OZE IF YOU SEE THIS.")
+                    log_print("ERROR WHEN TRYING TO ENACT PUT METHOD FOR ORDER CANCELING! REPORT TO ADMIN IF YOU SEE THIS.")
                     return
 
             if(get['status'] == "Awaiting Payment" or get['status'] == "Awaiting Fulfillment"):
@@ -173,7 +177,7 @@ def emailResults(recipients):
     s.starttls()
     s.login(MY_ADDRESS, MY_PASSWORD)
 
-    recipients += ", oze@obotach.com"
+    recipients += ", "+adminEmail
     splitEmails = recipients.split(", ")
     for currEmail in splitEmails:
         log_print("Attempting to send email to " + currEmail)
@@ -200,7 +204,7 @@ def emailCanceledCustomer():
     log_print("****************|BEGIN CUSTOMER ORDER CANCELATION EMAIL SENDING|****************")
     MY_ADDRESS = configEmail
     MY_PASSWORD = emailPassword
-    s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
+    s = smtplib.SMTP(host=smtpHost, port=int(smtpPort))
     s.starttls()
     s.login(MY_ADDRESS, MY_PASSWORD)
 
@@ -221,7 +225,7 @@ def emailCanceledCustomer():
         msg['To']=currEmail
         msg['Subject']="Order Number {} Canceled".format(orderID)
 
-        message = "Hello {},\n\nYour order number '{}' has been canceled\n as it contained the item '{}' (id: {}),\n which is not purchasable in your entered zipcode '{}'.\n If you had other item(s) in your order, please re-order without the mentioned item.\n\nThank you,\nBotach Inc.".format(illegalObjects[obj].getName(), illegalObjects[obj].getOrderID(), prodNAME, illegalObjects[obj].getIllegalItem(), illegalObjects[obj].getZipcode())
+        message = "Hello {},\n\nYour order number '{}' has been canceled\n as it contained the item '{}' (id: {}),\n which is not purchasable in your entered zipcode '{}'.\n If you had other item(s) in your order, please re-order without the mentioned item.\n\nThank you,\n{}".format(illegalObjects[obj].getName(), illegalObjects[obj].getOrderID(), prodNAME, illegalObjects[obj].getIllegalItem(), illegalObjects[obj].getZipcode(), companyName)
         msg.attach(MIMEText(message, "plain"))
         s.send_message(msg)
         log_print("Sent!")
@@ -258,7 +262,6 @@ def start(id, emails):
     cancelIllegalOrders()
     emailCanceledCustomer()
     emailResults(str(emails))
-    #asyncio.run(resultUI())
     copyfile(filePath, "logs/latest.log")
 
 #BEGIN FLASK
@@ -297,11 +300,5 @@ def background_process():
 def restrictions():
     if request.method == 'GET':
         return render_template('restrictions.html')
-    # if request.method == 'POST':
-    #     form_data = request.form
-    #     initialOrderID = request.form.get('initialOrderID')
-    #     emailList = request.form.get('emailList')
-
-    #     return render_template('restrictions.html',form_data = form_data)
 
 app.run(debug=True, port=5000, host='0.0.0.0')
